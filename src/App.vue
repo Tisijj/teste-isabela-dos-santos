@@ -1,17 +1,42 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <div>
+      <b-button v-on:click="buscaCep">Buscar dados rua</b-button>
+      <h1>{{ dadosRua }}</h1>
+    </div>
+    <div>
+      <b-button v-on:click="listaCasosEstado">Buscar Casos por Estado</b-button>
+      <h1>{{ covidPorEstado }}</h1>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-
 export default {
   name: "App",
-  components: {
-    HelloWorld,
+  components: {},
+  data() {
+    return {
+      dadosRua: [],
+      covidPorEstado: [],
+    };
+  },
+  mounted() {},
+  methods: {
+    buscaCep: function () {
+      const baseUrl = "https://brasilapi.com.br/api";
+      fetch(`${baseUrl}/cep/v2/cep=37500208`)
+        .then((res) => res.json())
+        .then((data) => (this.dadosRua = data))
+        .catch((err) => console.log(err.message));
+    },
+    listaCasosEstado: function () {
+      const baseUrl = "https://covid19-brazil-api.now.sh/api/report/v1";
+      fetch(`${baseUrl}/brazil/uf/sp`)
+        .then((res) => res.json())
+        .then((data) => (this.covidPorEstado = data))
+        .catch((err) => console.log(err.message));
+    },
   },
 };
 </script>
